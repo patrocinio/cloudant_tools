@@ -6,6 +6,7 @@ import config
 url = 'https://{0}.cloudant.com/'.format(config.account)
 def main():
 	dbs = requests.get(url + '_all_dbs', headers={'Authorization': config.auth}).json()
+    	print "dbs: " + json.dumps(dbs)
 	
 	output = []
 	for db in dbs:
