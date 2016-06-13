@@ -1,22 +1,28 @@
 import requests
 import json
+from cloudant.client import Cloudant
+from cloudant.database import CloudantDatabase
 
 import config
 
-url = 'https://{0}.cloudant.com/'.format(config.account)
 def main():
-	dbs = requests.get(url + '_all_dbs', headers={'Authorization': config.auth}).json()
-    	print "dbs: " + json.dumps(dbs)
-	
-	output = []
-	for db in dbs:
-		print 'Retrieving stats for {0}...'.format(db)
-		stats = requests.get(url + db, headers={'Authorization': config.auth}).json()
-		print "stats: " + json.dumps(stats)
-		output.append(stats['doc_count'])
+    client = Cloudant(config.username, config.password, account=config.account)
+
+    client.connect()
+
+    dbs = client.all_dbs()
+
+    output = []
+    for db in dbs:
+    	print 'Retrieving stats for {0}...'.format(db)
+        db = CloudantDatabase(client, db)
+        print "db: " + json.dumps(db)
+        output.append(db.doc_count())
 
 	print json.dumps(output, indent=4)
 	print json.dumps(sort(output), indent=4)
+
+    client.disconnect()
 
 def sort(array):
     less = []

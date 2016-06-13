@@ -1,4 +1,5 @@
 account = 'patrocinio' # FILL ME IN
-auth = 'edu0range'
+username = 'patrocinio'
+password = 'edu0range'
 
 
